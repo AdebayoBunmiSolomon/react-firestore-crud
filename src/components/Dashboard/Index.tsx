@@ -5,26 +5,26 @@ import { Header } from "./Header";
 import { Table } from "./Table";
 import { Add } from "./Add";
 import { Edit } from "./Edit";
-
-import { employeesData } from "../../data";
+import { collection, getDocs } from "firebase/firestore";
+import { db } from "../../config/firestore";
 
 export const Dashboard = ({ setIsAuthenticated }: any) => {
-  const [employees, setEmployees] = useState<any>(employeesData);
-  const [selectedEmployee, setSelectedEmployee] = useState<any>(null);
+  const [employees, setEmployees] = useState<any>([]);
+  const [selectedEmployee, setSelectedEmployee] = useState<any>();
   const [isAdding, setIsAdding] = useState<boolean>(false);
   const [isEditing, setIsEditing] = useState<boolean>(false);
 
+  const getEmployees = async () => {
+    const querySnapshot = await getDocs(collection(db, "employees"));
+    const employees = querySnapshot.docs.map((doc) => ({
+      id: doc.id,
+      ...doc.data(),
+    }));
+    setEmployees(employees);
+  };
+
   useEffect(() => {
-    const storedData: string | null = localStorage.getItem("employees_data");
-    if (storedData) {
-      const parsedData = JSON.parse(storedData);
-      if (
-        typeof parsedData === "object" &&
-        Object.keys(parsedData).length > 0
-      ) {
-        setEmployees(parsedData);
-      }
-    }
+    getEmployees();
   }, []);
 
   const handleEdit = (id: any) => {
