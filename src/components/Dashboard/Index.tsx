@@ -51,7 +51,7 @@ export const Dashboard = ({ setIsAuthenticated }: any) => {
         Swal.fire({
           icon: "success",
           title: "Deleted!",
-          text: `${employee.firstName} ${employee.lastName}'s data has been deleted.`,
+          text: `${employee.firstName} ${employee.lastName}'s data is deleted.`,
           showConfirmButton: false,
           timer: 1500,
         });
