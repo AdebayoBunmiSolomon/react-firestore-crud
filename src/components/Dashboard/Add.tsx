@@ -1,10 +1,18 @@
 import { useState } from "react";
 import Swal from "sweetalert2";
 import { IAddProps, formData } from "../../types/types";
-import { collection, addDoc } from "firebase/firestore";
+import {
+  collection,
+  addDoc,
+  doc,
+  query,
+  where,
+  getDocs,
+} from "firebase/firestore";
+import { db } from "../../config/firestore";
 
 export const Add = ({ employees, setEmployees, setIsAdding }: IAddProps) => {
-  const [formData, setFormData] = useState<formData>({
+  const [formDataVal, setFormDataVal] = useState<formData>({
     firstName: "",
     lastName: "",
     email: "",
@@ -12,34 +20,50 @@ export const Add = ({ employees, setEmployees, setIsAdding }: IAddProps) => {
     date: "",
   });
 
-  const handleAdd = (e: any) => {
+  const handleAdd = async (e: any) => {
     e.preventDefault();
-
-    if (
-      !formData.firstName ||
-      !formData.lastName ||
-      !formData.email ||
-      !formData.salary ||
-      !formData.date
-    ) {
-      return Swal.fire({
+    try {
+      if (
+        !formDataVal.firstName ||
+        !formDataVal.lastName ||
+        !formDataVal.email ||
+        !formDataVal.salary ||
+        !formDataVal.date
+      ) {
+        throw new Error("All fields are required.");
+      } else {
+        const docRef = query(
+          collection(db, "employees"),
+          where("email", "==", formDataVal.email)
+        );
+        const docSnap = await getDocs(docRef);
+        if (!docSnap.empty) {
+          throw new Error("Email already taken");
+        } else {
+          await addDoc(collection(db, "employees"), {
+            ...formDataVal,
+          });
+          Swal.fire({
+            icon: "success",
+            title: "Added!",
+            text: `${formDataVal.firstName} ${formDataVal.lastName}'s data has been Added.`,
+            showConfirmButton: false,
+            timer: 1500,
+          });
+        }
+      }
+    } catch (err: any) {
+      console.log(err);
+      Swal.fire({
         icon: "error",
         title: "Error!",
-        text: "All fields are required.",
+        text: err.message,
         showConfirmButton: true,
       });
+    } finally {
+      setEmployees(employees);
+      setIsAdding(false);
     }
-
-    setEmployees(employees);
-    setIsAdding(false);
-
-    Swal.fire({
-      icon: "success",
-      title: "Added!",
-      text: `${formData.firstName} ${formData.lastName}'s data has been Added.`,
-      showConfirmButton: false,
-      timer: 1500,
-    });
   };
 
   return (
@@ -53,9 +77,9 @@ export const Add = ({ employees, setEmployees, setIsAdding }: IAddProps) => {
           id='firstName'
           type='text'
           name='firstName'
-          value={formData.firstName}
+          value={formDataVal.firstName}
           onChange={(e) =>
-            setFormData({ ...formData, firstName: e.target.value })
+            setFormDataVal({ ...formDataVal, firstName: e.target.value })
           }
           className='w-full px-4 py-2 mb-4 border rounded-lg focus:outline-none focus:border-blue-500'
         />
@@ -64,9 +88,9 @@ export const Add = ({ employees, setEmployees, setIsAdding }: IAddProps) => {
           id='lastName'
           type='text'
           name='lastName'
-          value={formData.lastName}
+          value={formDataVal.lastName}
           onChange={(e) =>
-            setFormData({ ...formData, lastName: e.target.value })
+            setFormDataVal({ ...formDataVal, lastName: e.target.value })
           }
           className='w-full px-4 py-2 mb-4 border rounded-lg focus:outline-none focus:border-blue-500'
         />
@@ -75,8 +99,10 @@ export const Add = ({ employees, setEmployees, setIsAdding }: IAddProps) => {
           id='email'
           type='email'
           name='email'
-          value={formData.email}
-          onChange={(e) => setFormData({ ...formData, email: e.target.value })}
+          value={formDataVal.email}
+          onChange={(e) =>
+            setFormDataVal({ ...formDataVal, email: e.target.value })
+          }
           className='w-full px-4 py-2 mb-4 border rounded-lg focus:outline-none focus:border-blue-500'
         />
         <label className='block mb-2'>Salary ($)</label>
@@ -84,8 +110,10 @@ export const Add = ({ employees, setEmployees, setIsAdding }: IAddProps) => {
           id='salary'
           type='number'
           name='salary'
-          value={formData.salary}
-          onChange={(e) => setFormData({ ...formData, salary: e.target.value })}
+          value={formDataVal.salary}
+          onChange={(e) =>
+            setFormDataVal({ ...formDataVal, salary: e.target.value })
+          }
           className='w-full px-4 py-2 mb-4 border rounded-lg focus:outline-none focus:border-blue-500'
         />
         <label className='block mb-2'>Date</label>
@@ -93,8 +121,10 @@ export const Add = ({ employees, setEmployees, setIsAdding }: IAddProps) => {
           id='date'
           type='date'
           name='date'
-          value={formData.date}
-          onChange={(e) => setFormData({ ...formData, date: e.target.value })}
+          value={formDataVal.date}
+          onChange={(e) =>
+            setFormDataVal({ ...formDataVal, date: e.target.value })
+          }
           className='w-full px-4 py-2 mb-4 border rounded-lg focus:outline-none focus:border-blue-500'
         />
         <div className='mt-6'>

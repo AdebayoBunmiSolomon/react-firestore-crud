@@ -24,7 +24,7 @@ export const Dashboard = ({ setIsAuthenticated }: any) => {
 
   useEffect(() => {
     getEmployees();
-  }, []);
+  }, [employees]);
 
   const handleEdit = (id: any) => {
     const [employee] = employees.filter((employee: any) => employee.id === id);
