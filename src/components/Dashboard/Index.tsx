@@ -1,6 +1,5 @@
 import { useState, useEffect } from "react";
 import Swal from "sweetalert2";
-
 import { Header } from "./Header";
 import { Table } from "./Table";
 import { Add } from "./Add";
@@ -51,7 +50,7 @@ export const Dashboard = ({ setIsAuthenticated }: any) => {
         Swal.fire({
           icon: "success",
           title: "Deleted!",
-          text: `${employee.firstName} ${employee.lastName}'s data is deleted.`,
+          text: `${employee.firstName} ${employee.lastName}'s data has been deleted.`,
           showConfirmButton: false,
           timer: 1500,
         });
