@@ -95,7 +95,7 @@ export const Table = ({ employees, handleEdit, handleDelete }: any) => {
               <td
                 colSpan={8}
                 className='px-6 py-4 whitespace-nowrap text-sm text-gray-500'>
-                No Employees
+                Loading...
               </td>
             </tr>
           )}

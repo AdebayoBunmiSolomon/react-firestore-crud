@@ -1,6 +1,7 @@
 import { useState } from "react";
 import Swal from "sweetalert2";
 import { IAddProps, formData } from "../../types/types";
+import { collection, addDoc } from "firebase/firestore";
 
 export const Add = ({ employees, setEmployees, setIsAdding }: IAddProps) => {
   const [formData, setFormData] = useState<formData>({
@@ -29,14 +30,6 @@ export const Add = ({ employees, setEmployees, setIsAdding }: IAddProps) => {
       });
     }
 
-    const id = employees.length + 1;
-    const newEmployee = {
-      id,
-      formData: formData,
-    };
-
-    employees.push(newEmployee);
-    localStorage.setItem("employees_data", JSON.stringify(employees));
     setEmployees(employees);
     setIsAdding(false);
 
