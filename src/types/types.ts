@@ -4,6 +4,7 @@ export type formData = {
   email: string;
   salary: string;
   date: string;
+  imageUpload: string;
 };
 
 export interface IAddProps {

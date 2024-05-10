@@ -5,7 +5,7 @@ import { Table } from "./Table";
 import { Add } from "./Add";
 import { Edit } from "./Edit";
 import { collection, getDocs } from "firebase/firestore";
-import { db } from "../../config/firestore";
+import { db } from "../../firebase/config/firestore";
 
 export const Dashboard = ({ setIsAuthenticated }: any) => {
   const [employees, setEmployees] = useState<any>([]);
