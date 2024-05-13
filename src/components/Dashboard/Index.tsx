@@ -3,29 +3,19 @@ import { Header } from "./Header";
 import { Table } from "./Table";
 import { Add } from "./Add";
 import { Edit } from "./Edit";
-import { collection, getDocs } from "firebase/firestore";
-import { db } from "../../firebase/config/firestore";
 import { DeleteEmployee } from "../../firebase/services/DeleteEmployee";
 import { ToastContainer } from "react-toastify";
+import { GetEmployee } from "../../firebase/services/GetEmployee";
 
 export const Dashboard = ({ setIsAuthenticated }: any) => {
-  const [employees, setEmployees] = useState<any>([]);
   const [selectedEmployee, setSelectedEmployee] = useState<any>();
   const [isAdding, setIsAdding] = useState<boolean>(false);
   const [isEditing, setIsEditing] = useState<boolean>(false);
   const { useDeleteEmployee, loading } = DeleteEmployee();
-
-  const getEmployees = async () => {
-    const querySnapshot = await getDocs(collection(db, "employees"));
-    const employees = querySnapshot.docs.map((doc) => ({
-      id: doc.id,
-      ...doc.data(),
-    }));
-    setEmployees(employees);
-  };
+  const { useGetEmployee, employees, setEmployees } = GetEmployee();
 
   useEffect(() => {
-    getEmployees();
+    useGetEmployee();
   }, [employees]);
 
   const handleEdit = (id: any) => {
@@ -36,6 +26,7 @@ export const Dashboard = ({ setIsAuthenticated }: any) => {
 
   const handleDelete = async (id: string, imageUrl: string) => {
     await useDeleteEmployee(id, imageUrl);
+    await useGetEmployee();
   };
 
   return (

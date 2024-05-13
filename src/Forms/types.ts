@@ -4,5 +4,6 @@ export type addEmployee = {
   email: string;
   salary: string;
   date: string;
-  imageUpload: string;
+  imageUrl: string;
+  imageName: string;
 };

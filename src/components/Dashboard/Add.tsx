@@ -175,14 +175,14 @@ export const Add = ({ setIsAdding }: IAddProps) => {
                   }}
                   className='w-full px-4 py-2 border rounded-lg focus:outline-none focus:border-blue-500'
                 />
-                {errors.imageUpload && (
+                {errors.imageName && (
                   <p className='text-sm font-medium text-[crimson]'>
-                    {errors?.imageUpload?.message}
+                    {errors?.imageName?.message}
                   </p>
                 )}
               </div>
             )}
-            name='imageUpload'
+            name='imageName'
             defaultValue=''
           />
           <div className='mt-6'>

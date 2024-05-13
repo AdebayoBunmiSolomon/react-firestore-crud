@@ -12,5 +12,5 @@ export const addEmployeeValSchema = zod.object({
     .min(1, { message: "salary is required" })
     .regex(/^\d+$/, { message: "salary mist be a number" }),
   date: zod.string().min(1, { message: "date is not selected" }),
-  imageUpload: zod.string().min(1, { message: "image is not selected" }),
+  imageName: zod.string().min(1, { message: "image is not selected" }),
 });

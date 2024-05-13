@@ -42,6 +42,10 @@ export const AddEmployeeService = () => {
         });
       }
     } catch (err: any) {
+      toast(err.toString(), {
+        type: "error",
+        theme: "colored",
+      });
       console.log(err);
       setLoading(false);
     } finally {
