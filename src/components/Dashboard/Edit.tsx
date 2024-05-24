@@ -4,9 +4,9 @@ import { EditEmployeeService } from "../../firebase/services/EditEmployee";
 import { ToastContainer } from "react-toastify";
 
 export const Edit = ({
-  employees,
+  // employees,
   selectedEmployee,
-  setEmployees,
+  // setEmployees,
   setIsEditing,
 }: any) => {
   const { useEditEmployee, loading } = EditEmployeeService();
@@ -24,8 +24,8 @@ export const Edit = ({
 
   const handleUpdate = (e: any) => {
     e.preventDefault();
-    const oldImgUrl = formData.imageUrl;
-    useEditEmployee(formData, id, oldImgUrl, imgUpload);
+    const oldImgName = formData.imageName;
+    useEditEmployee(formData, id, oldImgName, imgUpload);
   };
 
   return (

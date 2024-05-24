@@ -2,8 +2,8 @@ import { deleteObject, ref } from "firebase/storage";
 import { storage } from "../config/firestore";
 
 export const DeleteImageUrl = () => {
-  const useDeleteImageUrl = async (imageUrl: string): Promise<boolean> => {
-    const imageRef = ref(storage, `images/${imageUrl}`);
+  const useDeleteImageUrl = async (imageName: string): Promise<boolean> => {
+    const imageRef = ref(storage, `images/${imageName}`);
     try {
       await deleteObject(imageRef);
       console.log("Image deleted successfully");

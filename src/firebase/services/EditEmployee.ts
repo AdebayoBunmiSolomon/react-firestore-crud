@@ -11,8 +11,9 @@ export const EditEmployeeService = () => {
   const { useDeleteImageUrl } = DeleteImageUrl();
   const { useGetImageUrl, genImgId } = getImageUrl();
 
-  const updateImg = async (newImgUpload: any, oldImgUrl: string) => {
-    const isImgDeleted = await useDeleteImageUrl(oldImgUrl);
+  const deleteToUpdateImg = async (newImgUpload: any, oldImgName: string) => {
+    const isImgDeleted = await useDeleteImageUrl(oldImgName);
+    console.log("image deleted:", isImgDeleted);
     if (isImgDeleted) {
       const newImgUrl: string = await useGetImageUrl(newImgUpload);
       return {
@@ -21,7 +22,7 @@ export const EditEmployeeService = () => {
       };
     } else {
       return {
-        newImgUrl: "",
+        newImgUrl: oldImgName,
         newImgName: "",
       };
     }
@@ -30,13 +31,17 @@ export const EditEmployeeService = () => {
   const useEditEmployee = async (
     data: formData,
     id: string,
-    oldImgUrl: string,
+    oldImgName: string,
     newImgUpload: any
   ) => {
     setLoading(true);
-    const { newImgName, newImgUrl } = await updateImg(newImgUpload, oldImgUrl);
+    const { newImgName, newImgUrl } = await deleteToUpdateImg(
+      newImgUpload,
+      oldImgName
+    );
     data.imageName = newImgName;
     data.imageUrl = newImgUrl;
+    console.log("New image url:", oldImgName);
     try {
       setLoading(true);
       await setDoc(doc(db, "employees", id), {
@@ -62,6 +67,3 @@ export const EditEmployeeService = () => {
     loading,
   };
 };
-function firestore() {
-  throw new Error("Function not implemented.");
-}

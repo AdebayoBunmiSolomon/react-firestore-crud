@@ -24,8 +24,8 @@ export const Dashboard = ({ setIsAuthenticated }: any) => {
     setIsEditing(true);
   };
 
-  const handleDelete = async (id: string, imageUrl: string) => {
-    await useDeleteEmployee(id, imageUrl);
+  const handleDelete = async (id: string, imageName: string) => {
+    await useDeleteEmployee(id, imageName);
     await useGetEmployee();
   };
 
