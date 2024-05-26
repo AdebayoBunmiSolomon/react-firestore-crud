@@ -35,30 +35,41 @@ export const EditEmployeeService = () => {
     newImgUpload: any
   ) => {
     setLoading(true);
-    const { newImgName, newImgUrl } = await deleteToUpdateImg(
-      newImgUpload,
-      oldImgName
-    );
-    data.imageName = newImgName;
-    data.imageUrl = newImgUrl;
-    console.log("New image url:", oldImgName);
-    try {
-      setLoading(true);
+    if (newImgUpload) {
+      const { newImgName, newImgUrl } = await deleteToUpdateImg(
+        newImgUpload,
+        oldImgName
+      );
+      data.imageName = newImgName;
+      data.imageUrl = newImgUrl;
       await setDoc(doc(db, "employees", id), {
         ...data,
       });
-      toast("Data edited successfully", {
+      toast("Data + Image edited successfully", {
         type: "success",
         theme: "colored",
       });
-    } catch (err: any) {
-      console.log(err);
-      toast("Error editing form data", {
-        type: "error",
-        theme: "colored",
-      });
-    } finally {
+      console.log("New image name:", oldImgName);
       setLoading(false);
+    } else {
+      try {
+        setLoading(true);
+        await setDoc(doc(db, "employees", id), {
+          ...data,
+        });
+        toast("Data edited successfully", {
+          type: "success",
+          theme: "colored",
+        });
+      } catch (err: any) {
+        console.log(err);
+        toast("Error editing form data", {
+          type: "error",
+          theme: "colored",
+        });
+      } finally {
+        setLoading(false);
+      }
     }
   };
 
